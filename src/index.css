@@ -1,111 +1,139 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import "tailwindcss";
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@theme {
+  /* --- Renk Paleti: "Gece Stüdyosu" --- */
+  --color-ink: #15111f;           /* ana koyu arkaplan - gece yarısı kayıt stüdyosu */
+  --color-panel: #211c33;         /* kart/panel arkaplanı, biraz daha açık */
+  --color-panel-light: #2c2645;   /* hover durumunda panel rengi */
+  --color-brass: #4fd1c5;         /* ana vurgu - mixer ışıkları, neon camgöbeği */
+  --color-brass-soft: #7ee8dc;    /* vurgunun daha soluk/parlak hali */
+  --color-parchment: #ece9f7;     /* açık metin rengi - stüdyo camının soğuk tonu */
+  --color-practice: #5fa98a;      /* başarı/tamamlandı rengi */
+  --color-slate-soft: #9791b3;    /* ikincil, soluk metin rengi */
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* --- Fontlar --- */
+  --font-display: "Fraunces", serif;
+  --font-body: "Inter", sans-serif;
+  --font-practice: "IBM Plex Mono", monospace;
+}
+/* --- PATCH BAY DOKUSU: eski piyano/mühendislik ızgarası yerine, bir mikser panelinin jak delikleri --- */
+.bg-blueprint {
+  background-image: radial-gradient(circle, rgba(79, 209, 197, 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+/* --- AMBIENT ATMOSFER: bg-ink kullanılan HER sayfada otomatik görünür, tek yerden yönetiliyor ---
+   Mixer ışıkları gibi çok yavaş kayan iki camgöbeği/mor tonlu ışıltı, "gece stüdyosu" hissini güçlendiriyor. */
+.bg-ink {
+  background-image:
+    radial-gradient(600px circle, rgba(79, 209, 197, 0.10), transparent 65%),
+    radial-gradient(500px circle, rgba(127, 119, 221, 0.07), transparent 65%);
+  background-position: 8% 12%, 92% 88%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  animation: atmosferKay 32s ease-in-out infinite alternate;
+}
+
+@keyframes atmosferKay {
+  0% { background-position: 8% 12%, 92% 88%; }
+  100% { background-position: 18% 24%, 82% 74%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-ink {
+    animation: none;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* --- CAMSI PANEL: kartlar artık hafif şeffaf + arkası bulanık, altındaki ışıltıyla derinlik kazanıyor --- */
+.bg-panel {
+  background-color: rgba(33, 28, 51, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-body {
-  margin: 0;
+/* --- BUTON IŞIK SÜPÜRMESİ: tüm vurgu butonlarına (Giriş Yap, Satın Al vs.) hover'da diyagonal ışık geçişi --- */
+.bg-brass {
+  position: relative;
+  overflow: hidden;
+}
+.bg-brass::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+.bg-brass:hover::after {
+  left: 125%;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+/* --- SİNYAL ÇUBUĞU: hover'da butonun sağ üst köşesinde titreşen minik bir ses sinyali göstergesi --- */
+.bg-brass::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  width: 12px;
+  height: 6px;
+  background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.65) 0 2px, transparent 2px 4px);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
 }
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.bg-brass:hover::before {
+  opacity: 0.85;
+  animation: sinyalTitresim 0.35s steps(2) infinite;
 }
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+@keyframes sinyalTitresim {
+  0%, 100% { background-position: 0 0; }
+  50% { background-position: 6px 0; }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+@media (prefers-reduced-motion: reduce) {
+  .bg-brass:hover::before {
+    animation: none;
   }
 }
-p {
-  margin: 0;
+
+/* --- CADENZA KENAR: sohbet penceresinin çerçevesinde yavaşça kayan gradyan --- */
+.cadenza-kenar {
+  background-image: linear-gradient(120deg, var(--color-brass), #7f77dd, var(--color-brass));
+  background-size: 200% 200%;
+  animation: cadenzaKenarKay 6s ease-in-out infinite;
+}
+@keyframes cadenzaKenarKay {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cadenza-kenar {
+    animation: none;
+  }
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* --- ÖZEL SCROLLBAR: tarayıcının varsayılan gri scrollbar'ı yerine ince, vurgu renkli bir tanesi --- */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brass) var(--color-ink);
 }
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-brass);
+  border-radius: 6px;
+  border: 2px solid var(--color-ink);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brass-soft);
 }

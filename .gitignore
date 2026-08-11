@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# --- SIRLAR: API anahtarları, JWT anahtarı, SMTP şifresi burada duruyor, asla commit edilmesin ---
+appsettings.json
+appsettings.*.json
+!appsettings.json.example
+
+# --- Backend (ASP.NET Core) derleme klasörleri ---
+bin/
+obj/
+*.user
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +32,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
