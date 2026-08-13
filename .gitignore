@@ -32,4 +32,5 @@ obj/
 *.njsproj
 *.sln
 *.sw?
+.vs/
 
